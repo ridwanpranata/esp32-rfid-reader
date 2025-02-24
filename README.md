@@ -7,11 +7,14 @@ This project is an RFID reader system using an **ESP32 WROOM 32D**, a **20x4 I2C
 - Switch button to toggle ON/OFF state.
 - Boot animation for better user experience.
 - Serial output for debugging.
+- Reads RFID **UID in both Decimal and Hexadecimal formats**.
+- Prevents duplicate readings within a timeout period.
 
 ## Components
 - **ESP32 WROOM 32D**
 - **20x4 I2C LCD**
 - **Switch (ON/OFF button)**
+- **RDM6300 RFID Reader (125kHz)**
 - **Silicon Labs CP210x USB to UART**
 
 ## Installation
@@ -48,11 +51,28 @@ This project is an RFID reader system using an **ESP32 WROOM 32D**, a **20x4 I2C
 | 12        | One side   |
 | GND       | Other side |
 
+| ESP32 Pin | RFID Reader Pin |
+|-----------|----------------|
+| 16        | TX             |
+| GND       | GND            |
+| 3.3V      | VCC            |
+
 ## How It Works
 1. The system initializes the LCD and displays a **boot animation**.
 2. The switch button toggles the system state **ON/OFF**.
 3. The LCD displays the updated status dynamically.
-4. Serial monitor logs system state changes.
+4. The RFID reader continuously listens for a tag scan.
+5. If a tag is detected, its **UID is displayed in Decimal format on the LCD**.
+6. The **Serial Monitor outputs the UID in both Decimal and Hexadecimal formats**.
+7. Duplicate reads are ignored within a configurable timeout period.
+
+## Serial Monitor Output Example
+```
+System initialized. Waiting for RFID...
+System ON
+RFID UID Decimal (4 Byte): 0012345678
+RFID UID Hexadecimal: 12AB34CD
+```
 
 ## File Structure
 ```
@@ -61,6 +81,9 @@ project_root/
 │   ├── LiquidCrystal/
 │   │   ├── LiquidCrystal.h
 │   │   ├── LiquidCrystal.cpp
+│   ├── RFIDReader/
+│   │   ├── RFIDReader.h
+│   │   ├── RFIDReader.cpp
 │-- src/
 │   ├── main.cpp
 │-- platformio.ini
