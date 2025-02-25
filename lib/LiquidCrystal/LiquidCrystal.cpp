@@ -14,7 +14,7 @@ void LiquidCrystal::init()
     
     boatingAnimation();
 
-    setLineText(2, "UID : - ");
+    setLineText(2, "UID: - ");
     setLineText(3, "Result: - ");
 }
 

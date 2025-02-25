@@ -1,10 +1,14 @@
 #include <Arduino.h>
 #include "LiquidCrystal.h"
 #include "RFIDReader.h"
+#include "BuzzerTone.h"
+#include "RFIDMelody.h"
+
 
 // Define PINs
 #define PIN_SWITCH 12
 #define PIN_RFID_RX 16
+#define PIN_BUZZER 5
 
 // Define LCD configuration and Serial baud rates
 #define LCD_COLUMN 20
@@ -16,6 +20,14 @@ LiquidCrystal lcd(LCD_COLUMN, LCD_ROW);
 // Create a HardwareSerial instance for RFID (using UART2)
 HardwareSerial rfidSerial(2);
 RFIDReader rfid(rfidSerial, PIN_RFID_RX, 2000); // 2000ms timeout for re-read
+
+// Define buzzer configuration
+#define BUZZER_CHANNEL 0
+#define BUZZER_RESOLUTION 8
+#define BUZZER_VOLUME 5
+
+BuzzerTone buzzer(PIN_BUZZER, BUZZER_CHANNEL, BUZZER_RESOLUTION, BUZZER_VOLUME);
+RFIDMelody rfidMelody(buzzer);
 
 // System variables
 bool systemOn = false;
@@ -29,6 +41,9 @@ void setup() {
     
     // Initialize RFID reader
     rfid.begin();
+
+    // Initialize Buzzer
+    buzzer.begin();
     
     // Read initial switch state and update system status
     switchState = (digitalRead(PIN_SWITCH) == LOW);
@@ -69,8 +84,16 @@ void loop() {
         Serial.println(uidDecimalStr);
         Serial.print("RFID UID Hexadecimal (4 Byte): ");
         Serial.println(rfid.getLastUIDHex());
-        
+
         lcd.setLineText(2, ("UID: " + String(uidDecimalStr)).c_str());
+
+        if(String(uidDecimalStr) == "0008263636") {
+            rfidMelody.playOk();
+        } else if (String(uidDecimalStr) == "0011851419") {
+            rfidMelody.playDenied();
+        } else {
+            rfidMelody.playUIDMelody(uidDecimalStr);
+        }
     }
     
     delay(50);
