@@ -1,9 +1,10 @@
 #include <Arduino.h>
+#include <WiFi.h>
+#include "secrets.h"
 #include "LiquidCrystal.h"
 #include "RFIDReader.h"
 #include "BuzzerTone.h"
 #include "RFIDMelody.h"
-
 
 // Define PINs
 #define PIN_SWITCH 12
@@ -49,6 +50,18 @@ void setup() {
     switchState = (digitalRead(PIN_SWITCH) == LOW);
     systemOn = switchState;
     lcd.setLineText(1, systemOn ? "Status: ON" : "Status: OFF");
+
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+    Serial.print("Menghubungkan ke WiFi");
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+
+    Serial.println("\nTerhubung ke WiFi!");
+    Serial.print("IP Address: ");
+    Serial.println(WiFi.localIP());
     
     Serial.println("System initialized. Waiting for RFID...");
 }
@@ -87,9 +100,9 @@ void loop() {
 
         lcd.setLineText(2, ("UID: " + String(uidDecimalStr)).c_str());
 
-        if(String(uidDecimalStr) == "0008263636") {
+        if(String(uidDecimalStr) == RFID_MASTER_UID) {
             rfidMelody.playOk();
-        } else if (String(uidDecimalStr) == "0011851419") {
+        } else if (String(uidDecimalStr) == RFID_SLAVE_UID) {
             rfidMelody.playDenied();
         } else {
             rfidMelody.playUIDMelody(uidDecimalStr);
