@@ -22,6 +22,9 @@ class RFIDReader {
     // Flush the RFID serial buffer
     void flushBuffer();
 
+    // Get the last UID in hexadecimal format as a String
+    String getLastUIDHex();
+
   private:
     HardwareSerial &_rfidSerial;
     int _rxPin;

@@ -67,6 +67,9 @@ void loop() {
     if (rfid.readTag(uidDecimalStr, sizeof(uidDecimalStr))) {
         Serial.print("RFID UID Decimal (4 Byte): ");
         Serial.println(uidDecimalStr);
+        Serial.print("RFID UID Hexadecimal (4 Byte): ");
+        Serial.println(rfid.getLastUIDHex());
+        
         lcd.setLineText(2, ("UID: " + String(uidDecimalStr)).c_str());
     }
     

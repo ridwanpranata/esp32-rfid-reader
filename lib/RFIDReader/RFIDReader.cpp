@@ -70,3 +70,10 @@ bool RFIDReader::readTag(char *lastUID, size_t uidSize) {
     return false;
   }
 }
+
+String RFIDReader::getLastUIDHex() {
+  char hexStr[9];
+  // Format _lastDecimalUID as an 8-digit uppercase hexadecimal string
+  snprintf(hexStr, sizeof(hexStr), "%08X", _lastDecimalUID);
+  return String(hexStr);
+}
