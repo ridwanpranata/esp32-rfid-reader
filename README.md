@@ -1,17 +1,19 @@
 # RFID Reader with ESP32 and I2C LCD
 
-This project is an RFID reader system using an **ESP32 WROOM 32D**, a **20x4 I2C LCD**, a **switch button**, a **buzzer for sound feedback**, and an **RDM6300 RFID Reader (125kHz)**. It utilizes the **LiquidCrystal_I2C** library for LCD control and is developed using **VSCode with PlatformIO**. The RFID reader scans **4-byte UID values** in both **Decimal and Hexadecimal formats**, allowing identification of different RFID tags. The scanned UID is processed to determine access permissions (allowed/denied) or to generate a unique sound feedback using the buzzer.
+![Platform](https://img.shields.io/badge/platform-esp32-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
+This project is an RFID reader system using an **ESP32 WROOM 32D**, a **20x4 I2C LCD**, a **switch button**, a **buzzer for sound feedback**, and an **RDM6300 RFID Reader (125kHz)**. It utilizes the **LiquidCrystal_I2C** library for LCD control and is developed using **VSCode with PlatformIO**. The RFID reader scans **4-byte UID values** in both **decimal and hexadecimal formats**, allowing identification of different RFID tags. The scanned UID is processed to determine access permissions (allowed/denied) or to generate a unique sound feedback using the buzzer.
 
 ## Features
 - Displays system status on an I2C LCD.
 - Switch button to toggle ON/OFF state.
-- Boot animation for better user experience.
+- Boot animation with a progress bar effect for better user experience.
 - Serial output for debugging.
-- Reads RFID UID in both Decimal and Hexadecimal formats.
-- Prevents duplicate readings within a timeout period.
+- Reads RFID UIDs in both decimal and hexadecimal formats.
+- Prevents duplicate readings within a configurable timeout period (`RFID_READ_TIMEOUT`, default: 2 seconds).
 - Buzzer feedback with different melodies for accepted, denied, and custom RFID tags.
-- WiFi connectivity to enable network-based functionalities.
+- WiFi connectivity to enable network-based functionalities (e.g., sending scanned UID to a server).
 - Uses a **`secrets.h` file** for storing sensitive credentials (WiFi SSID & password).
 
 ## Components
@@ -20,7 +22,14 @@ This project is an RFID reader system using an **ESP32 WROOM 32D**, a **20x4 I2C
 - Switch (ON/OFF button)
 - RDM6300 RFID Reader (125kHz)
 - Buzzer (PWM-controlled)
-- Silicon Labs CP210x USB to UART
+
+## Prerequisites
+Before setting up the project, ensure you have the following installed:
+
+- **VSCode with PlatformIO** - Used as the development environment.
+- **Silicon Labs CP210x USB to UART Driver** - Required for serial communication with ESP32.  
+  [Download the driver here](https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers?tab=downloads).
+- **Git** - To clone the repository.
 
 ## Installation
 1. **Clone the repository**
@@ -77,23 +86,31 @@ This project is an RFID reader system using an **ESP32 WROOM 32D**, a **20x4 I2C
 | GND       | GND        |
 
 ## How It Works
-1. The system initializes the LCD and displays a **boot animation**.
-2. The switch button toggles the system state **ON/OFF**.
-3. The LCD displays the updated status dynamically.
-4. The RFID reader continuously listens for a tag scan.
-5. If a RFID tag is detected:
-   - The UID is displayed in Decimal format on the LCD.
-   - The Serial Monitor outputs show the UID in both Decimal and Hexadecimal formats.
-   - A melody plays on the buzzer based on the tag's UID.
-   - Specific UIDs have predefined sounds (allowed/denied sounds).
-   - Other UIDs generate a melody based on their last four digits.
-6. Duplicate RFID Tag are ignored within a configurable timeout period (RFID_READ_TIMEOUT).
-7. The system connects to WiFi using credentials from `secrets.h`.
+### 1. System Initialization
+- The system initializes the LCD and displays a **boot animation**.
+
+### 2. RFID Scanning & UID Processing
+- The switch button toggles the system state **ON/OFF**.
+- The LCD displays the updated status dynamically.
+- The RFID reader continuously listens for a tag scan.
+- If an RFID tag is detected:
+  - The UID is displayed in decimal format on the LCD.
+  - The Serial Monitor outputs show the UID in both decimal and hexadecimal formats.
+  - A melody plays on the buzzer based on the tag's UID.
+  - Specific UIDs have predefined sounds (allowed/denied sounds).
+  - Other UIDs generate a melody based on their last four digits.
+
+### 3. Duplicate RFID Prevention
+- Duplicate RFID tags are ignored within a configurable timeout period (`RFID_READ_TIMEOUT`).
+
+### 4. WiFi Connectivity & IP Usage
+- The system connects to WiFi using credentials from `secrets.h`.
+- If successful, the **IP address** is displayed in the Serial Monitor.
+- This WiFi connection can be used for future network-related functionalities such as **sending scanned UID data to a server**.
 
 ## WiFi Integration
 - The ESP32 will attempt to connect to WiFi at startup using credentials stored in `secrets.h`.
-- If successful, the **IP address** is displayed in the Serial Monitor.
-- This WiFi connection can be used for future network-related functionalities.
+- If WiFi is unavailable, the system will run in **offline mode**.
 
 ## Sound Feedback
 | RFID UID         | Buzzer Sound |
