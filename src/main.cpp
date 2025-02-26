@@ -104,11 +104,11 @@ void loop() {
         lcd.setLineText(2, ("UID: " + String(uidDecimalStr)).c_str());
 
         if(String(uidDecimalStr) == RFID_ALLOWED_UID) {
-            rfidMelody.playAllowed();
             lcd.setLineText(3,"Result: Allowed");
+            rfidMelody.playAllowed();
         } else if (String(uidDecimalStr) == RFID_DENIED_UID) {
-            rfidMelody.playDenied();
             lcd.setLineText(3,"Result: Denied");
+            rfidMelody.playDenied();
         } else {
             rfidMelody.playUIDMelody(uidDecimalStr);
         }
