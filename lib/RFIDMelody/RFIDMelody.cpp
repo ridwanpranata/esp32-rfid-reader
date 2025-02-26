@@ -2,7 +2,7 @@
 
 RFIDMelody::RFIDMelody(BuzzerTone &buzzer) : _buzzer(buzzer) {}
 
-void RFIDMelody::playOk() {
+void RFIDMelody::playAllowed() {
     int melody[] = {C4, E4, G4};
     int durations[] = {200, 200, 400};
     int length = sizeof(melody) / sizeof(melody[0]);

@@ -19,7 +19,7 @@
 class RFIDMelody {
     public:
         RFIDMelody(BuzzerTone &buzzer);
-        void playOk();
+        void playAllowed();
         void playDenied();
         void playUIDMelody(const char* uidDecimalStr);
     private:

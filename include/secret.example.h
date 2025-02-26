@@ -4,7 +4,7 @@
 #define WIFI_SSID "YourWiFiSSID"
 #define WIFI_PASSWORD "YourWiFiPassword"
 
-#define RFID_MASTER_UID "YourMasterRFID"
-#define RFID_SLAVE_UID "YourSlaveRFID"
+#define RFID_ALLOWED_UID "YourAllowedRFID"
+#define RFID_DENIED_UID "YourDeniedRFID"
 
 #endif // SECRETS_H

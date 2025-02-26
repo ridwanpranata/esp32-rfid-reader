@@ -20,7 +20,10 @@ LiquidCrystal lcd(LCD_COLUMN, LCD_ROW);
 
 // Create a HardwareSerial instance for RFID (using UART2)
 HardwareSerial rfidSerial(2);
-RFIDReader rfid(rfidSerial, PIN_RFID_RX, 2000); // 2000ms timeout for re-read
+
+// Define RFID configuration
+#define RFID_READ_TIMEOUT 2000
+RFIDReader rfid(rfidSerial, PIN_RFID_RX, RFID_READ_TIMEOUT); // 2000ms timeout for re-read
 
 // Define buzzer configuration
 #define BUZZER_CHANNEL 0
@@ -53,13 +56,13 @@ void setup() {
 
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-    Serial.print("Menghubungkan ke WiFi");
+    Serial.print("Connecting to WiFi");
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
     }
 
-    Serial.println("\nTerhubung ke WiFi!");
+    Serial.println("\nWiFi connected!");
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
     
@@ -100,10 +103,12 @@ void loop() {
 
         lcd.setLineText(2, ("UID: " + String(uidDecimalStr)).c_str());
 
-        if(String(uidDecimalStr) == RFID_MASTER_UID) {
-            rfidMelody.playOk();
-        } else if (String(uidDecimalStr) == RFID_SLAVE_UID) {
+        if(String(uidDecimalStr) == RFID_ALLOWED_UID) {
+            rfidMelody.playAllowed();
+            lcd.setLineText(3,"Result: Allowed");
+        } else if (String(uidDecimalStr) == RFID_DENIED_UID) {
             rfidMelody.playDenied();
+            lcd.setLineText(3,"Result: Denied");
         } else {
             rfidMelody.playUIDMelody(uidDecimalStr);
         }
