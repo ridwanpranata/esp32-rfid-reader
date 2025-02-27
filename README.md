@@ -11,7 +11,7 @@ This project is an RFID reader system using an **ESP32 WROOM 32D**, a **20x4 I2C
 - Boot animation with a progress bar effect for better user experience.
 - Serial output for debugging.
 - Reads RFID UIDs in both decimal and hexadecimal formats.
-- Prevents duplicate readings within a configurable timeout period (`RFID_READ_TIMEOUT`, default: 2 seconds).
+- Prevents duplicate readings within a configurable timeout period (`RFID_READ_TIMEOUT`, default: 2000 ms).
 - Buzzer feedback with different melodies for accepted, denied, and custom RFID tags.
 - WiFi connectivity to enable network-based functionalities (e.g., sending scanned UID to a server).
 - Uses a **`secrets.h` file** for storing sensitive credentials (WiFi SSID & password).
