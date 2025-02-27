@@ -39,7 +39,7 @@ Before setting up the project, ensure you have the following installed:
    ```
 2. **Copy `secrets.example.h` file in the `include/` directory to `include/secrets.h`**
    ```sh
-   cp include/secrets.example.h include/secrets.h
+   cp include/secrets.h.example include/secrets.h
    ```
    **Note:** Do not commit `secrets.h` to GitHub. Add it to `.gitignore`.
 3. **Open in VSCode with PlatformIO**
